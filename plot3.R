@@ -10,15 +10,14 @@ SCC <- readRDS(unzip("data.zip", "Source_Classification_Code.rds"))
 
 
 names(NEI)
-sum_year <- with(NEI, tapply(Emissions, year, sum))
-totalpm25 <- data.frame(year = names(sum_year), pm25 = sum_year)
+library(dplyr)
+library(ggplot2)
+baltimore <- NEI %>% filter(fips == "24510") %>% group_by(year, type) %>% summarise(Emissions = sum(Emissions))
 
-png(filename = "plot1.png")
-with(totalpm25, 
-     barplot(height = pm25, names.arg = year, 
-             xlab = "YEAR", 
-             ylab = expression("Total PM"[2.5]*" emission"), 
-             col = year))
+
+png(filename = "plot3.png")
+ggplot(data = baltimore, aes(x = year, y = Emissions, group = type, col = type)) + 
+        geom_line() +
+        ggtitle(label = expression("Total PM"[2.5]*" emissions by type"))
 dev.off()
 
-     

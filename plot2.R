@@ -1,7 +1,8 @@
 # url to file
 url <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip"
-download.file(url = url, destfile = "data.zip", method = "curl")
-
+if (!file.exists("data.zip")) {
+        download.file(url = url, destfile = "data.zip", method = "curl")
+}
 # read the files inside .zip
 unzip("data.zip", list = TRUE)
 NEI <- readRDS(unzip("data.zip", "summarySCC_PM25.rds")) 
